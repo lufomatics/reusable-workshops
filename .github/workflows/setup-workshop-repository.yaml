@@ -79,14 +79,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.templates-repository }}
-          path: ${{ format('.{0}', github.repository_owner) }}
+          path: ${{ format('.{0}', inputs.templates-repository) }}
           ref: v0.1.0
 
       - name: Build welcome message from template
         id: build-issue-description
         uses: skills/action-text-variables@v1
         with:
-          template-file: ${{ format('.{0}/{1}/step-feedback/welcome.md', github.repository_owner, inputs.templates-path) }}
+          template-file: ${{ format('.{0}/{1}/step-feedback/welcome.md', inputs.templates-repository, inputs.templates-path) }}
           template-vars: |
             title=${{ inputs.workshop-title }}
             login=${{ github.actor }}
