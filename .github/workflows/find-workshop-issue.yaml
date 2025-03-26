@@ -1,0 +1,65 @@
+name: Find Workshop Issue
+
+on:
+  workflow_call:
+    inputs:
+      issue-title-text:
+        description: 'Text to search for within issue titles'
+        required: false
+        default: 'Workshop'
+        type: string
+    outputs:
+      issue-url:
+        description: "URL of the found issue"
+        value: ${{ jobs.find_workshop.outputs.issue-url }}
+      issue-number:
+        description: "Number of the found issue"
+        value: ${{ jobs.find_workshop.outputs.issue-number }}
+
+permissions:
+  issues: read
+
+jobs:
+  find_workshop:
+    name: Find workshop by issue title
+    runs-on: ubuntu-latest
+
+    outputs:
+      issue-url: ${{ steps.find-workshop-issue.outputs.ISSUE_URL }}
+      issue-number: ${{ steps.find-workshop-issue.outputs.ISSUE_NUMBER }}
+
+    steps:
+      - id: find-workshop-issue
+        uses: actions/github-script@v7
+        env:
+          ISSUE_TITLE_PREFIX: ${{ inputs.issue-title-text }}
+        with:
+          script: |
+            const response = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'created',    
+              direction: 'desc',  
+              per_page: 50
+            });
+
+            // Filter only issues, exclude pull requests
+            const issues = response.data.filter(item => !item.pull_request);
+
+            core.startGroup(`Found ${issues.length} open issues`);
+            issues.forEach(issue => {
+              core.info(`#${issue.number}: ${issue.html_url}`);
+            });
+            core.endGroup();
+
+            const issue = issues.find(
+              issue => issue.title.includes(process.env.ISSUE_TITLE_PREFIX)
+            );
+            if (!issue) {
+              throw new Error('No workshop issue found');
+            }
+
+            core.info(`Workshop issue found: #${issue.number} (${issue.html_url})`);
+            core.setOutput('ISSUE_URL', issue.html_url);
+            core.setOutput('ISSUE_NUMBER', issue.number);
