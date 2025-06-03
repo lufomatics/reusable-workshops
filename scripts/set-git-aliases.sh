@@ -12,7 +12,7 @@ git config --global alias.sparse-clone '!bash -c '\''
     git sparse-checkout set "$DIR"
 '\'' --'
 
-git config --global alias.sparse-init '!bash -c '\'"
+git config --global alias.sparse-init '!bash -c '\''
   DIR=${1:-};
   [ -z "$DIR"] && read -p "Directory to sparse-checkout: " DIR;
   #auto-enable sparse mode and pull only $DIR
