@@ -2,7 +2,7 @@
 
 set -e
 
-cat <<< 'EOF'
+cat << 'EOF'
 Installing git aliases:
 ⚫ git sparse-clone
 ⚫ git sparse-init
