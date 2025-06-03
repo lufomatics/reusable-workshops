@@ -10,8 +10,8 @@ EOF
 
 git config --global alias.sparse-clone '!bash -c '\''
   REPO=${1:-}; DIR=${2:-};
-  [ -z "$REPO" ] && read -p "Repo URL: REPO;
-  [ -z "$DIR"] && read -p "Dir to sparse-checkout: " DIR;
+  [ -z "$REPO" ] && read -p "Repo URL: " REPO;
+  [ -z "$DIR" ] && read -p "Dir to sparse-checkout: " DIR;
   git clone --filter=blob:none --sparse "$REPO"  && \
     cd "$(basename "$REPO" .git)" && \
     git sparse-checkout set "$DIR"
