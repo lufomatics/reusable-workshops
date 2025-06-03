@@ -2,11 +2,6 @@
 
 set -e
 
-cat << 'EOF'
-Installing git aliases:
-⚫ git sparse-clone
-⚫ git sparse-init
-EOF
 
 git config --global alias.sparse-clone '!bash -c '\''
   REPO=${1:-}; DIR=${2:-};
