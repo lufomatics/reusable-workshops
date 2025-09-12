@@ -22,7 +22,7 @@ on:
         description: 'Repository containing the response templates'
         required: false
         type: string
-        default: 'lufomatics/reusables'
+        default: 'lufomatics/reusable-workshops'
       templates-path:
         description: 'Path to the response templates in the repository'
         required: false
