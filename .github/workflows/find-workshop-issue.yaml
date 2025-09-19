@@ -6,8 +6,13 @@ on:
       issue-title-text:
         description: 'Text to search for within issue titles'
         required: false
-        default: 'Workshop'
         type: string
+        default: 'Workshop'
+      include-closed-issues:
+        description: 'Issue state to filter by'
+        required: false
+        type: boolean
+        default: false
     outputs:
       issue-url:
         description: "URL of the found issue"
@@ -38,7 +43,7 @@ jobs:
             const response = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'open',
+              state: '${{ inputs.include-closed-issues && 'all' || 'open' }},
               sort: 'created',    
               direction: 'desc',  
               per_page: 50
@@ -47,7 +52,7 @@ jobs:
             // Filter only issues, exclude pull requests
             const issues = response.data.filter(item => !item.pull_request);
 
-            core.startGroup(`Found ${issues.length} open issues`);
+            core.startGroup(`Found ${issues.length} ${{ inputs.include-closed-issues && '' || 'open ' }}issues`);
             issues.forEach(issue => {
               core.info(`#${issue.number}: ${issue.html_url}`);
             });
@@ -62,4 +67,5 @@ jobs:
 
             core.info(`Workshop issue found: #${issue.number} (${issue.html_url})`);
             core.setOutput('ISSUE_URL', issue.html_url);
+
             core.setOutput('ISSUE_NUMBER', issue.number);
