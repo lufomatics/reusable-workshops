@@ -43,7 +43,7 @@ jobs:
             const response = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: '${{ inputs.include-closed-issues && 'all' || 'open' }},
+              state: '${{ inputs.include-closed-issues && 'all' || 'open' }}',
               sort: 'created',    
               direction: 'desc',  
               per_page: 50
@@ -69,3 +69,4 @@ jobs:
             core.setOutput('ISSUE_URL', issue.html_url);
 
             core.setOutput('ISSUE_NUMBER', issue.number);
+
