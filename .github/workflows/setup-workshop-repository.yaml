@@ -118,17 +118,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deactivate 'Copy Workshop' button
+      - name: Deactivate 'Prepare Workshop' button
         
         run: |
-          # Remove href from 'Copy Workshop' button
-          target='id="copy-workshop"[^>]*href="[^"]*"'
-          replacement='id="copy-workshop"'
+          # Remove href from 'Prepare Workshop' button
+          target='id="prepare-workshop"[^>]*href="[^"]*"'
+          replacement='id="prepare-workshop"'
           sed -i "s|$target|$replacement|g" README.md
 
           # Change color from green to gray
-          target=Copy_Workshop-008000
-          replacement=Copy_Workshop-AAA
+          target=Prepare_Workshop-008000
+          replacement=Prepare_Workshop-AAA
           sed -i "s|$target|$replacement|g" README.md
 
       - name: Activate 'Start Workshop' button
